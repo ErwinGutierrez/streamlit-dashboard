@@ -44,7 +44,16 @@ if 'Product line' in df.columns:
     opciones = st.multiselect("Selecciona una o más líneas de producto:", df['Product line'].unique())
     if opciones:
         df_filtrado = df_filtrado[df_filtrado['Product line'].isin(opciones)]
+# Filtro por mes
+st.subheader("📆 Filtrar por Mes")
+meses_unicos = df_filtrado['Month'].unique().tolist()
+meses_ordenados = [m for m in ['January', 'February', 'March']
+                   if m in meses_unicos]
 
+meses_seleccionados = st.multiselect("Selecciona uno o más meses:", meses_ordenados)
+
+if meses_seleccionados:
+    df_filtrado = df_filtrado[df_filtrado['Month'].isin(meses_seleccionados)]
 st.markdown("---")
 # Métricas clave
 st.subheader("📌 Indicadores Clave")
