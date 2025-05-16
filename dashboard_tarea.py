@@ -38,8 +38,28 @@ fecha_inicio, fecha_fin = st.date_input(
 )
 
 df_filtrado = df[(df['Date'] >= pd.to_datetime(fecha_inicio)) & (df['Date'] <= pd.to_datetime(fecha_fin))]
+# Filtro por línea de producto (si existe esta columna)
+if 'Product line' in df.columns:
+    st.subheader("📦 Filtrar por Línea de Producto")
+    opciones = st.multiselect("Selecciona una o más líneas de producto:", df['Product line'].unique())
+    if opciones:
+        df_filtrado = df_filtrado[df_filtrado['Product line'].isin(opciones)]
 
 st.markdown("---")
+# Métricas clave
+st.subheader("📌 Indicadores Clave")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("💰 Ventas Totales", f"${df_filtrado['Total'].sum():,.2f}")
+
+with col2:
+    promedio_diario = df_filtrado.groupby('Date')['Total'].sum().mean()
+    st.metric("📊 Promedio Diario", f"${promedio_diario:,.2f}")
+
+with col3:
+    st.metric("🧾 Total Transacciones", f"{len(df_filtrado):,}")
 
 # Gráfico 1: Ventas Totales por Día
 st.subheader("📈 Ventas Totales por Día")
