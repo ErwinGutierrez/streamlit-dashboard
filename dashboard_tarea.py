@@ -163,13 +163,15 @@ if 'Rating' in df_filtrado.columns:
 
 st.markdown("---")
 # Gráfico 4: Boxplot de Total por Tipo de Cliente
+st.subheader("📦 Distribución del Gasto Total por Tipo de Cliente")
+
 if 'Customer type' in df_filtrado.columns and 'Total' in df_filtrado.columns:
     import plotly.graph_objects as go
 
     tipos = df_filtrado['Customer type'].unique()
-    fig_box = go.Figure()
+    fig5 = go.Figure()
 
-    colores = {
+   colores = {
         'Member': '#DAA520',  # dark yellow
         'Normal': '#20B2AA'   # light sea green
     }
@@ -182,11 +184,24 @@ if 'Customer type' in df_filtrado.columns and 'Total' in df_filtrado.columns:
             boxmean='sd',
             marker_color=colores.get(tipo, 'gray'),
             fillcolor=colores.get(tipo, 'gray'),
-             line_color='white',
-            whiskerwidth=1.5
+            line_color='black'
         ))
 
-    
+        # Anotación
+        stats = f"""Media: {grupo.mean():.2f}<br>Mediana: {grupo.median():.2f}<br>Q1: {grupo.quantile(0.25):.2f}<br>Q3: {grupo.quantile(0.75):.2f}"""
+        fig_box.add_annotation(
+            x=tipo,
+            y=grupo.median(),
+            text=stats,
+            showarrow=False,
+            yshift=30,
+            align='left',
+            font=dict(size=10),
+            bgcolor='white',
+            bordercolor='black',
+            borderwidth=1
+        )
+
     fig_box.update_layout(
         title='Distribución del Gasto Total por Tipo de Cliente',
         yaxis_title='Gasto Total ($)',
