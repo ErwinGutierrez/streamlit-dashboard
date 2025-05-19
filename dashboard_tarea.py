@@ -244,7 +244,7 @@ fig = px.imshow(
 
 fig.update_layout(width=700, height=600)
 
-st.plotly_chart(fig_bar, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True)
 st.markdown("---")
 
 
