@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.express as px
 
 # Título y descripción
-st.title("📊 Dashboard Interactivo de Ventas Equipo 13")
+st.title("📊 Dashboard Interactivo de Ventas Equipo 13.")
 st.markdown("""
 Este dashboard permite visualizar la evolución de las ventas, con datos limpios y transformados para facilitar el análisis temporal.
 Incluye filtros interactivos y múltiples vistas para comprender mejor el comportamiento de las ventas.
@@ -216,6 +216,38 @@ if 'Customer type' in df_filtrado.columns and 'Total' in df_filtrado.columns:
 else:
     st.warning("Las columnas 'Customer type' y/o 'Total' no se encuentran en los datos.")
 st.markdown("---")
+# Gráfico 7 
+# Análisis de correlación numérica
+
+# Título
+st.subheader("📊 Análisis de correlación numérica")
+
+# Selección de variables numéricas relevantes
+numerical_cols = ['Unit price', 'Quantity', 'Tax 5%', 'Total', 'cogs', 'gross income', 'Rating']
+
+# Calcular la matriz de correlación
+corr = df[numerical_cols].corr().round(2)
+
+# Transformar la matriz en formato largo para Plotly
+corr_long = corr.reset_index().melt(id_vars='index')
+corr_long.columns = ['Variable 1', 'Variable 2', 'Correlación']
+
+# Crear el heatmap interactivo
+fig = px.imshow(
+    corr,
+    text_auto=True,
+    color_continuous_scale='RdBu',
+    zmin=-1, zmax=1,
+    labels=dict(color='Correlación'),
+    title='Mapa de calor: Correlación entre variables numéricas'
+)
+
+fig.update_layout(width=700, height=600)
+
+st.plotly_chart(fig_bar, use_container_width=True)
+st.markdown("---")
+
+
 # Reflexión final
 st.markdown("### 💬 Reflexión")
 st.markdown("""
