@@ -182,7 +182,8 @@ if 'Customer type' in df_filtrado.columns and 'Total' in df_filtrado.columns:
             boxmean='sd',
             marker_color=colores.get(tipo, 'gray'),
             fillcolor=colores.get(tipo, 'gray'),
-            line_color='black'
+             line_color='white',
+            whiskerwidth=1.5
         ))
 
     
