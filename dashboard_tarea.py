@@ -163,15 +163,16 @@ if 'Rating' in df_filtrado.columns:
 
 st.markdown("---")
 # Gráfico 4: Boxplot de Total por Tipo de Cliente
+# Gráfico: Boxplot con colores personalizados
 st.subheader("📦 Distribución del Gasto Total por Tipo de Cliente")
 
 if 'Customer type' in df_filtrado.columns and 'Total' in df_filtrado.columns:
     import plotly.graph_objects as go
 
     tipos = df_filtrado['Customer type'].unique()
-    fig5 = go.Figure()
+    fig_box = go.Figure()
 
-   colores = {
+    colores = {
         'Member': '#DAA520',  # dark yellow
         'Normal': '#20B2AA'   # light sea green
     }
@@ -211,6 +212,7 @@ if 'Customer type' in df_filtrado.columns and 'Total' in df_filtrado.columns:
     )
 
     st.plotly_chart(fig_box, use_container_width=True)
+
 else:
     st.warning("Las columnas 'Customer type' y/o 'Total' no se encuentran en los datos.")
 st.markdown("---")
