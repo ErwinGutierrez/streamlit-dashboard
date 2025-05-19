@@ -251,7 +251,7 @@ st.markdown("---")
 # Análisis de correlación numérica
 
 # Título
-st.subheader("📊 Composición del Ingreso Bruto por Sucursal y Línea de Producto")
+st.subheader("📊 Composición del ingreso bruto por sucursal y línea de producto")
 
 # Agrupar y resumir datos
 data_agrupada = df.groupby(['Branch', 'Product line'])['gross income'].sum().reset_index()
