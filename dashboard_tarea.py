@@ -89,31 +89,8 @@ fig1.update_traces(line_color='darkorange')
 fig1.update_layout(title_x=0.5)
 st.plotly_chart(fig1, use_container_width=True)
 st.markdown("---")
-# Gráfico 2: Comparación con datos no filtrados
-st.subheader("📉 Comparativa General de Ventas Totales (sin filtros)")
 
-ventas_diarias_totales = df.groupby('Date')['Total'].sum().reset_index()
-
-fig2 = px.line(
-    ventas_diarias_totales,
-    x='Date',
-    y='Total',
-    title='Evolución General de Ventas Totales',
-    markers=True,
-    labels={'Date': 'Fecha', 'Total': 'Ventas Totales (USD)'},
-    template='plotly_white'
-)
-
-fig2.update_traces(line_color='seagreen')
-fig2.update_layout(
-    xaxis_title='Fecha',
-    yaxis_title='Ventas Totales (USD)',
-    title_x=0.5
-)
-
-st.plotly_chart(fig2, use_container_width=True)
-st.markdown("---")
-# Gráfico 3: Ingresos por Línea de Producto
+# Gráfico 2: Ingresos por Línea de Producto
 st.subheader("📦 Ingresos por Línea de Producto")
 
 # Asegurarse de que la columna existe
@@ -138,7 +115,98 @@ else:
     st.warning("La columna 'Product line' no se encuentra en los datos.")
 
 st.markdown("---")
+# Gráfico 3: Distribución de Calificaciones de Clientes con Plotly (sin numpy)
+st.subheader("⭐ Distribución de Calificaciones de Clientes")
 
+if 'Rating' in df_filtrado.columns:
+    import plotly.express as px
+    import plotly.graph_objects as go
+
+    col = "Rating"
+    data = df_filtrado[col].dropna()
+
+    # Cálculos estadísticos
+    mean = data.mean()
+    median = data.median()
+    q1 = data.quantile(0.25)
+    q3 = data.quantile(0.75)
+
+    # Histograma base con Plotly Express
+    fig4 = px.histogram(
+        data,
+        nbins=12,
+        title='Distribución de Calificaciones de Clientes',
+        labels={'value': 'Calificación'},
+        opacity=0.6,
+        color_discrete_sequence=['royalblue']
+    )
+
+    # Añadir líneas estadísticas
+    fig4.add_vline(x=mean, line_dash="dash", line_color="red", annotation_text=f"Media: {mean:.2f}", annotation_position="top right")
+    fig4.add_vline(x=median, line_dash="dash", line_color="green", annotation_text=f"Mediana: {median:.2f}", annotation_position="top left")
+    fig4.add_vline(x=q1, line_dash="dot", line_color="orange", annotation_text=f"Q1: {q1:.2f}", annotation_position="bottom right")
+    fig4.add_vline(x=q3, line_dash="dot", line_color="orange", annotation_text=f"Q3: {q3:.2f}", annotation_position="bottom left")
+
+    fig4.update_layout(
+        xaxis_title='Calificación',
+        yaxis_title='Frecuencia',
+        template='plotly_white',
+        title_x=0.5
+    )
+
+    st.plotly_chart(fig4, use_container_width=True)
+else:
+    st.warning("La columna 'Rating' no se encuentra en los datos.")
+st.markdown("---")
+# Gráfico 4: Boxplot de Total por Tipo de Cliente
+st.subheader("📦 Distribución del Gasto Total por Tipo de Cliente")
+
+if 'Customer type' in df_filtrado.columns and 'Total' in df_filtrado.columns:
+    import plotly.graph_objects as go
+
+    tipos = df_filtrado['Customer type'].unique()
+    fig5 = go.Figure()
+
+    # Añadir cada boxplot
+    for tipo in tipos:
+        grupo = df_filtrado[df_filtrado['Customer type'] == tipo]['Total']
+        fig5.add_trace(go.Box(
+            y=grupo,
+            name=tipo,
+            boxmean='sd',
+            marker_color='lightseagreen'
+        ))
+
+    # Añadir anotaciones por grupo
+    for i, tipo in enumerate(tipos):
+        grupo = df_filtrado[df_filtrado['Customer type'] == tipo]['Total']
+        stats = f"""Media: {grupo.mean():.2f}<br>Mediana: {grupo.median():.2f}<br>Q1: {grupo.quantile(0.25):.2f}<br>Q3: {grupo.quantile(0.75):.2f}"""
+
+        fig5.add_annotation(
+            x=tipo,
+            y=grupo.median(),
+            text=stats,
+            showarrow=False,
+            yshift=30,
+            align='left',
+            font=dict(size=10),
+            bgcolor='white',
+            bordercolor='black',
+            borderwidth=1
+        )
+
+    fig5.update_layout(
+        title='Distribución del Gasto Total por Tipo de Cliente',
+        yaxis_title='Gasto Total ($)',
+        xaxis_title='Tipo de Cliente',
+        template='plotly_white',
+        title_x=0.5
+    )
+
+    st.plotly_chart(fig5, use_container_width=True)
+else:
+    st.warning("Las columnas 'Customer type' y/o 'Total' no se encuentran en los datos.")
+st.markdown("---")
 # Reflexión final
 st.markdown("### 💬 Reflexión")
 st.markdown("""
