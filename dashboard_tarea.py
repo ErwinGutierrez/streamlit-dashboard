@@ -216,6 +216,57 @@ if 'Customer type' in df_filtrado.columns and 'Total' in df_filtrado.columns:
 else:
     st.warning("Las columnas 'Customer type' y/o 'Total' no se encuentran en los datos.")
 st.markdown("---")
+#Gráfico 1.5
+# Justificación: Este gráfico no se incluye en el dashboard, debido a que se mostrará el mapa de calor la relación entre distintas variables, entre ellas la relación entre Costos y Ganancia Bruta.
+
+# Título
+st.subheader("📈 Relación entre Costos e Ingreso Bruto")
+
+# Gráfico de dispersión
+fig_scatter = px.scatter(
+    df,
+    x='cogs',
+    y='gross income',
+    title='Relación entre Costo de Bienes Vendidos e Ingreso Bruto',
+    labels={'cogs': 'Costo de Bienes Vendidos', 'gross income': 'Ingreso Bruto'},
+    opacity=0.6,
+    color_discrete_sequence=['darkorange']
+)
+
+
+fig_scatter.update_layout(template='plotly_white', title_x=0)
+
+st.plotly_chart(fig_scatter, use_container_width=True)
+st.markdown("---")
+
+
+# Gráfico 1.6
+# Justificación: Este gráfico será presentado en el dashboard, ya que da información relevante sobre los medios de pagos más utilizados en las transacciones, que podrá ser utilizada por el departamento de marketing.
+
+# Contar frecuencia de métodos de pago
+payment_counts = df['Payment'].value_counts().reset_index()
+payment_counts.columns = ['Método de Pago', 'Frecuencia']
+
+# Título
+st.subheader("💳 Frecuencia de Métodos de Pago")
+
+# Gráfico
+fig_bar = px.bar(
+    payment_counts,
+    x='Método de Pago',
+    y='Frecuencia',
+    text='Frecuencia',
+    color='Método de Pago',
+    title='Frecuencia de Métodos de Pago',
+    labels={'Frecuencia': 'Cantidad de Transacciones'}
+)
+
+fig_bar.update_traces(textposition='outside')
+fig_bar.update_layout(template='plotly_white', title_x=0)
+
+st.plotly_chart(fig_bar, use_container_width=True)
+st.markdown("---")
+
 # Reflexión final
 st.markdown("### 💬 Reflexión")
 st.markdown("""
