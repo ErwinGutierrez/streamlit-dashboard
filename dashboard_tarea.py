@@ -248,7 +248,7 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("---")
 
 # Gráfico 8 
-# Análisis de correlación numérica
+# Composición del ingreso bruto por sucursal y línea de producto
 
 # Título
 st.subheader("📊 Composición del ingreso bruto por sucursal y línea de producto")
