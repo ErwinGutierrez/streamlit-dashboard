@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.express as px
 
 # Título y descripción
-st.title("📊 Dashboard Interactivo de Ventas")
+st.title("📊 Dashboard Interactivo de Ventas Equipo 13")
 st.markdown("""
 Este dashboard permite visualizar la evolución de las ventas, con datos limpios y transformados para facilitar el análisis temporal.
 Incluye filtros interactivos y múltiples vistas para comprender mejor el comportamiento de las ventas.
@@ -89,55 +89,52 @@ fig1.update_traces(line_color='darkorange')
 fig1.update_layout(title_x=0.5)
 st.plotly_chart(fig1, use_container_width=True)
 
-# Gráfico 2: Cantidad de Transacciones por Día
-st.subheader("🧾 Cantidad de Transacciones por Día")
+# Gráfico 2: Comparación con datos no filtrados
+st.subheader("📉 Comparativa General de Ventas Totales (sin filtros)")
 
-transacciones = df_filtrado.groupby('Date').size().reset_index(name='Cantidad')
+ventas_diarias_totales = df.groupby('Date')['Total'].sum().reset_index()
 
-fig2 = px.bar(
-    transacciones,
+fig2 = px.line(
+    ventas_diarias_totales,
     x='Date',
-    y='Cantidad',
-    title='Cantidad de Transacciones por Día',
-    labels={'Cantidad': 'Número de Transacciones'},
+    y='Total',
+    title='Evolución General de Ventas Totales',
+    markers=True,
+    labels={'Date': 'Fecha', 'Total': 'Ventas Totales (USD)'},
     template='plotly_white'
+)
+
+fig2.update_traces(line_color='seagreen')
+fig2.update_layout(
+    xaxis_title='Fecha',
+    yaxis_title='Ventas Totales (USD)',
+    title_x=0.5
 )
 
 st.plotly_chart(fig2, use_container_width=True)
+# Gráfico 3: Ingresos por Línea de Producto
+st.subheader("📦 Ingresos por Línea de Producto")
 
-# Gráfico 3: Promedio de Ventas por Día de la Semana
-st.subheader("📅 Promedio de Ventas por Día de la Semana")
+# Asegurarse de que la columna existe
+if 'Product line' in df_filtrado.columns:
+    ventas_por_producto = df_filtrado.groupby('Product line')['Total'].sum().reset_index()
+    ventas_por_producto = ventas_por_producto.sort_values(by='Total', ascending=True)
 
-ventas_dia = df_filtrado.groupby('Day')['Total'].mean().reindex([
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-]).reset_index()
+    fig3 = px.bar(
+        ventas_por_producto,
+        x='Total',
+        y='Product line',
+        orientation='h',
+        title='Ingresos por Línea de Producto',
+        labels={'Total': 'Ingresos Totales (USD)', 'Product line': 'Línea de Producto'},
+        color='Product line',
+        template='plotly_white'
+    )
 
-fig3 = px.bar(
-    ventas_dia,
-    x='Day',
-    y='Total',
-    title='Promedio de Ventas por Día de la Semana',
-    labels={'Total': 'Promedio de Ventas (USD)'},
-    template='plotly_white',
-    color_discrete_sequence=['#636EFA']
-)
-
-st.plotly_chart(fig3, use_container_width=True)
-
-# Gráfico 4: Distribución de Ventas por Hora
-st.subheader("⏰ Distribución de Ventas por Hora del Día")
-
-fig4 = px.histogram(
-    df_filtrado,
-    x='Hour',
-    y='Total',
-    nbins=24,
-    title='Distribución de Ventas por Hora',
-    labels={'Hour': 'Hora del Día', 'Total': 'Ventas Totales'},
-    template='plotly_white'
-)
-
-st.plotly_chart(fig4, use_container_width=True)
+    fig3.update_layout(title_x=0.5)
+    st.plotly_chart(fig3, use_container_width=True)
+else:
+    st.warning("La columna 'Product line' no se encuentra en los datos.")
 
 st.markdown("---")
 
