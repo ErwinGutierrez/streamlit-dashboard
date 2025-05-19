@@ -247,6 +247,44 @@ fig.update_layout(width=700, height=600)
 st.plotly_chart(fig, use_container_width=True)
 st.markdown("---")
 
+# Gráfico 8 
+# Análisis de correlación numérica
+
+# Título
+st.subheader("📊 Composición del Ingreso Bruto por Sucursal y Línea de Producto")
+
+# Agrupar y resumir datos
+data_agrupada = df.groupby(['Branch', 'Product line'])['gross income'].sum().reset_index()
+
+# Gráfico de barras agrupadas con Plotly
+fig = px.bar(
+    data_agrupada,
+    x='Branch',
+    y='gross income',
+    color='Product line',
+    barmode='group',
+    title='Composición del ingreso bruto por sucursal y línea de producto',
+    labels={
+        'Branch': 'Sucursal',
+        'gross income': 'Ingreso bruto',
+        'Product line': 'Línea de producto'
+    },
+    text_auto='.2s'
+)
+
+# Ajustes adicionales
+fig.update_layout(
+    xaxis_title='Sucursal',
+    yaxis_title='Ingreso bruto',
+    legend_title='Línea de producto',
+    width=800,
+    height=500
+)
+fig.update_layout(width=700, height=600)
+
+st.plotly_chart(fig, use_container_width=True)
+st.markdown("---")
+
 
 # Reflexión final
 st.markdown("### 💬 Reflexión")
