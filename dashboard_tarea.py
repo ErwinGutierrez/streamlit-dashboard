@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.express as px
 
 # Título y descripción
-st.title("📊 Dashboard Interactivo de Ventas Equipo 13")
+st.title("📊 Dashboard Interactivo de Ventas Equipo 13.")
 st.markdown("""
 Este dashboard permite visualizar la evolución de las ventas, con datos limpios y transformados para facilitar el análisis temporal.
 Incluye filtros interactivos y múltiples vistas para comprender mejor el comportamiento de las ventas.
