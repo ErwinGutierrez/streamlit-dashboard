@@ -88,7 +88,7 @@ fig1 = px.line(
 fig1.update_traces(line_color='darkorange')
 fig1.update_layout(title_x=0.5)
 st.plotly_chart(fig1, use_container_width=True)
-
+st.markdown("---")
 # Gráfico 2: Comparación con datos no filtrados
 st.subheader("📉 Comparativa General de Ventas Totales (sin filtros)")
 
@@ -112,6 +112,7 @@ fig2.update_layout(
 )
 
 st.plotly_chart(fig2, use_container_width=True)
+st.markdown("---")
 # Gráfico 3: Ingresos por Línea de Producto
 st.subheader("📦 Ingresos por Línea de Producto")
 
